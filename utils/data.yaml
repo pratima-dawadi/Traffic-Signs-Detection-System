@@ -1,0 +1,6 @@
+
+train: /kaggle/input/traffic-signs-detection-system/total_dataset/total_dataset/images/train
+val: /kaggle/input/traffic-signs-detection-system/total_dataset/total_dataset/images/train
+
+nc: 8
+names: ['regulatory--no-parking--g2', 'warning--pedestrians-crossing--g5', 'regulatory--no-entry--g1', 'regulatory--no-right-turn--g1', 'regulatory--no-left-turn--g2', 'regulatory--no-horn--g1', 'regulatory--no-stopping--g1', 'information--pedestrians-crossing--g1']

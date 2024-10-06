@@ -5,3 +5,6 @@ __pycache__
 dataset/
 map1.png
 mydata.json
+mydata2.json
+collection_dataset/
+model/images/
