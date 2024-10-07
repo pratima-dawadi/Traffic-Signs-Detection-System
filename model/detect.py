@@ -17,7 +17,7 @@ temp = pathlib.PosixPath
 pathlib.PosixPath = pathlib.WindowsPath
 
 device = select_device('')
-model = DetectMultiBackend('weights/best.pt', device=device, dnn=False, data=None, fp16=False)
+model = DetectMultiBackend('weights/best_20epochs.pt', device=device, dnn=False, data=None, fp16=False)
 stride, names, pt = model.stride, model.names, model.pt
 imgsz = check_img_size((640, 640), s=stride)
 
@@ -27,7 +27,11 @@ class_names = model.names if hasattr(model, 'names') else [
     'regulatory--no-stopping--g1', 'information--pedestrians-crossing--g1'
 ]
 
-def run_inference(image_path):
+output_folder = 'inference_images'
+os.makedirs(output_folder, exist_ok=True)
+
+def run_inference(image_path,latitude=None,longitude=None):
+    latitude, longitude = get_geolocation(image_path, latitude, longitude)
     img0 = cv2.imread(image_path)
     img = letterbox(img0, imgsz, stride=stride, auto=pt)[0]
     img = img.transpose((2, 0, 1))[::-1]
@@ -50,6 +54,17 @@ def run_inference(image_path):
                 label = f'{class_names[c]} {conf:.2f}'
                 plot_one_box(xyxy, img0, label=label, color=(0, 255, 0), line_thickness=3)
 
+        if latitude is not None and longitude is not None:
+            geo_label = f'Lat: {latitude:.6f}, Lon: {longitude:.6f}'
+            get_location_name(latitude, longitude)
+
+            t_size = cv2.getTextSize(geo_label, cv2.FONT_HERSHEY_SIMPLEX, 1.5, 2)[0]
+            text_x, text_y = 10, 50
+            cv2.rectangle(img0, (text_x, text_y - t_size[1] - 5), (text_x + t_size[0], text_y + 5), (0, 0, 0), -1)
+            cv2.putText(img0, geo_label, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+
+    output_image_path = os.path.join(output_folder, os.path.basename(image_path))
+    cv2.imwrite(output_image_path, img0)
 
     resized_img = cv2.resize(img0, (800, 600))
     cv2.imshow("Traffic Sign Detection", resized_img)
@@ -63,7 +78,8 @@ def plot_one_box(x, img, color=(128, 128, 128), label=None, line_thickness=3):
 
     if label:
         tf = max(tl - 1, 1)
-        t_size = cv2.getTextSize(label, 0, fontScale=tl * 1.5, thickness=tf)[0]
+        font_scale=1
+        t_size = cv2.getTextSize(label, 0, fontScale=font_scale, thickness=tf)[0]
         
         text_x = c1[0]
         text_y = c1[1] - 2
@@ -75,10 +91,10 @@ def plot_one_box(x, img, color=(128, 128, 128), label=None, line_thickness=3):
             text_y = c1[1] + t_size[1] + 5
 
         cv2.rectangle(img, (text_x, text_y - t_size[1]), (text_x + t_size[0], text_y + 5), (0, 0, 0, 150), -1)
-        cv2.putText(img, label, (text_x, text_y), 0, tl * 1.5, (255, 255, 255), thickness=tf, lineType=cv2.LINE_AA)
+        cv2.putText(img, label, (text_x, text_y), 0,font_scale, (255, 255, 255), thickness=tf, lineType=cv2.LINE_AA)
 
 image_folder = 'images'
 for image_file in os.listdir(image_folder):
     if image_file.lower().endswith(('.jpg', '.jpeg', '.png')):
         image_path = os.path.join(image_folder, image_file)
-        run_inference(image_path)
+        run_inference(image_path,27.736002037944854,85.33569845164817)
