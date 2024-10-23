@@ -1,6 +1,6 @@
 import os
 
-label_dir = './total_dataset/labels'
+label_dir = '../collection_dataset/split_dataset/labels/train'
 
 class_count = {}
 
@@ -11,10 +11,7 @@ for label_file in os.listdir(label_dir):
         for line in file:
             class_id = int(line.split()[0])
             
-            if class_id in class_count:
-                class_count[class_id] += 1
-            else:
-                class_count[class_id] = 1
+            class_count[class_id]=class_count.get(class_id,0)+1
 
 for class_id, count in class_count.items():
     print(f'Class {class_id}: {count} images')
