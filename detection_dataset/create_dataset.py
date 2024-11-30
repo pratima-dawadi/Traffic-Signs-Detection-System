@@ -10,7 +10,7 @@ def main():
     load_dotenv()
     try:
         traffic_signs=get_traffic_signs()
-        map_feature_ids=get_map_feature_ids('mydata.json',traffic_signs)
+        map_feature_ids=get_map_feature_ids('billboard.json',traffic_signs)
         image_ids=get_image_ids(map_feature_ids)
         access_token = os.getenv("ACCESS_TOKEN")
 

@@ -9,3 +9,6 @@ mydata2.json
 collection_dataset/
 model/images/
 model/inference_images/
+billboard_detection/images/
+billboard_detection/cropped_images/
+billboard_detection/blur_images/

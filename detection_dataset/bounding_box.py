@@ -107,7 +107,7 @@ def visualize_annotations(image_path, bboxes):
 
 
 def get_traffic_signs():
-    filename='traffic_signs.txt'
+    filename='billboard.txt'
     try:
         with open(filename) as f:
             return [line.strip() for line in f if line.strip()]

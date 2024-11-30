@@ -27,6 +27,10 @@ class_names = model.names if hasattr(model, 'names') else [
     'regulatory--no-stopping--g1', 'information--pedestrians-crossing--g1'
 ]
 
+# class_names = model.names if hasattr(model, 'names') else [
+#     'object--sign-store'
+# ]
+
 output_folder = 'inference_images'
 os.makedirs(output_folder, exist_ok=True)
 
@@ -43,7 +47,7 @@ def run_inference(image_path,latitude=None,longitude=None):
         img = img[None]
 
     pred = model(img, augment=False, visualize=False)
-    pred = non_max_suppression(pred, conf_thres=0.25, iou_thres=0.45, classes=None, agnostic=False, max_det=1000)
+    pred = non_max_suppression(pred, conf_thres=0.50, iou_thres=0.45, classes=None, agnostic=False, max_det=1000)
 
     for i, det in enumerate(pred):
         if len(det):

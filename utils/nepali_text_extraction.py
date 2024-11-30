@@ -4,7 +4,6 @@ from pylab import rcParams
 import spacy
 from spacy import displacy
 
-
 rcParams['figure.figsize'] = 8, 16
 
 reader = easyocr.Reader(['en'])

@@ -12,7 +12,7 @@ def get_map_feature_ids(json_file,traffic_signs):
 
     return map_feature_ids
 
-def get_traffic_signs(filename='traffic_signs.txt'):
+def get_traffic_signs(filename='billboard.txt'):
     try:
         with open(filename) as f:
             return [line.strip() for line in f if line.strip()]
@@ -43,7 +43,7 @@ def main():
         traffic_signs = get_traffic_signs()
         print(traffic_signs)
         
-        map_feature_ids=get_map_feature_ids('mydata.json',traffic_signs)
+        map_feature_ids=get_map_feature_ids('billboard.json',traffic_signs)
         image_ids=get_image_ids(map_feature_ids)
         return image_ids
     except Exception as e:
